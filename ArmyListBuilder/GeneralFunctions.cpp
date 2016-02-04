@@ -14,12 +14,12 @@ namespace gsh{
 	}
 	
 	//create new army button functions
-	
 	void cna::backButton(int& currentState){
-		currentState -= 1;
+		--currentState;
 	}
 	
 	void init(std::vector<Resources>& resources){
+		//load resources resize vector
 		resources.resize(7);
 		sf::Texture temp;
 		temp.loadFromFile("img/button.png");
@@ -30,7 +30,7 @@ namespace gsh{
 		resources[MainMenu].buttons.push_back(Button(300, 250, 200, 50, mm::newArmyButton, resources[MainMenu].textures[0], "New", font));
 		resources[MainMenu].buttons.push_back(Button(300, 400, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
 		
-		//set buttons for create new army menu
+		//set buttons for create new army menu		
 		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
 		
 	}

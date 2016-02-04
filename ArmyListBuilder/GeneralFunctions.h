@@ -3,7 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
+#include <json.hpp>
 #include "Button.h"
+
+namespace js = nlohmann; //shorten namespace
 
 enum gameState{
 	MainMenu,
@@ -13,6 +17,15 @@ enum gameState{
 	SelectingOptions,
 	InEditMenu,
 	Exit
+};
+
+enum armies{
+	Ace,
+	VirtueGang,
+	CountlessSouls,
+	Stat,
+	Bugs,
+	Ghouls
 };
 
 struct Resources{
@@ -45,7 +58,7 @@ namespace gsh{ //gamestate handler
 		void exitButton(int& currentState);
 		void newArmyButton(int& currentState);
 	};
-	namespace cna{
+	namespace cna{ //create new army
 		void backButton(int& currentState);
 	};
 };

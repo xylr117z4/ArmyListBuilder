@@ -6,7 +6,6 @@
 
 #include "GeneralFunctions.h"
 #include "Collisions.h"
-#include "Squad.h"
 
 int main(int argc, char **argv){
 	
