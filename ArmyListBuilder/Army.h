@@ -15,6 +15,7 @@ public:
 	void writeToFile();
 	~Army();
 	int armyID;
+	int palette;
 	std::string armyName;
 	int numberOfSquads;
 

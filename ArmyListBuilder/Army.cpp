@@ -6,7 +6,7 @@ Army::Army(){
 Army::Army(std::string name, int id){
 	armyName = name;
 	armyID = id;
-	numberOfSquads = 2;
+	numberOfSquads = 1;
 }
 
 void Army::writeToFile(){
@@ -16,12 +16,17 @@ void Army::writeToFile(){
 	
 	armyOutput["Name"] = armyName;
 	armyOutput["Army"] = armyID;
+	armyOutput["Palette"] = palette;
 	armyOutput["Squads"]["Number"] = numberOfSquads;
 	for(int i = 0; i < numberOfSquads; ++i){
 		ss.str("");
 		ss << i;
 		armyOutput["Squads"][ss.str()]["Stats"] = 0; //squads[i].stats
-		armyOutput["Squads"][ss.str()]["Gear"] = 0; //squads[i].gear
+		
+		//testing what the squad will store just a json thing and put it in gear
+		js::json thing;
+		thing["stuff"] = 9001;
+		armyOutput["Squads"][ss.str()]["Gear"] = thing; //squads[i].gear
 	}
 	
 	armyOutputFile.open(armyName + ".json");
