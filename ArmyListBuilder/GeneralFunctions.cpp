@@ -3,6 +3,9 @@
 namespace gsh{
 	
 	sf::Font font;
+	Army workingArmy;
+	std::stringstream ssArmyName;
+	bool enteringArmyName = false;
 	
 	//main menu button functions
 	void mm::exitButton(int& currentState){
@@ -11,11 +14,20 @@ namespace gsh{
 	
 	void mm::newArmyButton(int& currentState){
 		currentState = CreateNewArmy;
+		workingArmy = Army("workingName", Ace);
 	}
 	
 	//create new army button functions
 	void cna::backButton(int& currentState){
 		--currentState;
+	}
+	
+	void cna::saveArmy(int& currentState){
+		workingArmy.writeToFile();
+	}
+	
+	void cna::setArmyName(int& currentState){
+		enteringArmyName = true;
 	}
 	
 	void init(std::vector<Resources>& resources){
@@ -30,7 +42,9 @@ namespace gsh{
 		resources[MainMenu].buttons.push_back(Button(300, 250, 200, 50, mm::newArmyButton, resources[MainMenu].textures[0], "New", font));
 		resources[MainMenu].buttons.push_back(Button(300, 400, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
 		
-		//set buttons for create new army menu		
+		//set buttons for create new army menu
+		resources[CreateNewArmy].buttons.push_back(Button(300, 250, 200, 50, cna::setArmyName, resources[MainMenu].textures[0], "Name", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::saveArmy, resources[MainMenu].textures[0], "Save", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
 		
 	}
@@ -87,6 +101,16 @@ namespace gsh{
 						int mouseX = event.mouseButton.x;
 						int mouseY = event.mouseButton.y;
 						printf("x: %d y: %d button: %d\n\n", mouseX, mouseY, resources[CreateNewArmy].checkForClick(sf::Vector2f(mouseX, mouseY), currentState));
+					}
+					if(enteringArmyName){
+						if(event.type == sf::Event::TextEntered && event.key.code != sf::Keyboard::Return){
+							std::cout << static_cast<char>(event.text.unicode) << "\n";
+							ssArmyName << static_cast<char>(event.text.unicode);
+						}
+						else if(event.key.code == sf::Keyboard::Return){
+							enteringArmyName = false;
+							workingArmy.armyName = ssArmyName.str();
+						}
 					}
 					break;
 					

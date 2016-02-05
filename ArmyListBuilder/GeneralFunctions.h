@@ -3,11 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <fstream>
-#include <json.hpp>
+#include <sstream>
 #include "Button.h"
-
-namespace js = nlohmann; //shorten namespace
+#include "Army.h"
 
 enum gameState{
 	MainMenu,
@@ -60,6 +58,8 @@ namespace gsh{ //gamestate handler
 	};
 	namespace cna{ //create new army
 		void backButton(int& currentState);
+		void saveArmy(int& currentState);
+		void setArmyName(int& currentState);
 	};
 };
 
