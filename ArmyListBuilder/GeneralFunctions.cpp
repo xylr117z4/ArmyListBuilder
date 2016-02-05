@@ -4,7 +4,7 @@ namespace gsh{
 	
 	sf::Font font;
 	Army workingArmy;
-	std::stringstream ssArmyName;
+	std::string ssArmyName;
 	bool enteringArmyName = false;
 	
 	//main menu button functions
@@ -15,7 +15,7 @@ namespace gsh{
 		
 		void newArmyButton(int& currentState){
 			currentState = CreateNewArmy;
-			workingArmy = Army("workingName", Ace);
+			workingArmy = Army("Name", Ace);
 		}
 	};
 	
@@ -33,9 +33,38 @@ namespace gsh{
 		
 		void setArmyName(int& currentState){
 			enteringArmyName = true;
-			ssArmyName.str("");
+			ssArmyName = "";
+		}
+		
+		void takeArmyName(bool enteringArmyName,sf::Event& event){
+			if(enteringArmyName){
+				if(event.type == sf::Event::KeyPressed){
+					if(event.key.code == sf::Keyboard::Return) {
+						enteringArmyName = false;
+						workingArmy.armyName = ssArmyName;
+					}
+					else if(event.key.code == sf::Keyboard::BackSpace){
+						ssArmyName.pop_back();
+						cna::workingArmyName.setString(ssArmyName);
+					}
+				}
+				else if(event.type == sf::Event::TextEntered){
+					if(event.text.unicode != 8 && event.text.unicode != 13 && event.text.unicode != 9166){
+						ssArmyName += static_cast<char>(event.text.unicode);
+					}
+					cna::workingArmyName.setString(ssArmyName);
+				}
+			}
 		}
 	};
+	
+	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources){
+		if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
+			int mouseX = event.mouseButton.x;
+			int mouseY = event.mouseButton.y;
+			printf("x: %d y: %d button: %d\n\n", mouseX, mouseY, resources.checkForClick(sf::Vector2f(mouseX, mouseY), currentState));
+		}
+	}
 	
 	void init(std::vector<Resources>& resources){
 		//load resources resize vector
@@ -51,6 +80,8 @@ namespace gsh{
 		
 		//set buttons for create new army menu
 		cna::workingArmyName.setFont(font);
+		cna::workingArmyName.setPosition(200, 75);
+		cna::workingArmyName.setString("Name");
 		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyName, resources[MainMenu].textures[0], "Set Name", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::saveArmy, resources[MainMenu].textures[0], "Save", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
@@ -98,40 +129,12 @@ namespace gsh{
 			switch(currentState){
 				case MainMenu:
 					//check if buttons are clicked
-					if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
-						int mouseX = event.mouseButton.x;
-						int mouseY = event.mouseButton.y;
-						printf("x: %d y: %d button: %d\n\n", mouseX, mouseY, resources[MainMenu].checkForClick(sf::Vector2f(mouseX, mouseY), currentState));
-					}
+					checkMouseClick(event, currentState, resources[MainMenu]);
 					break;
 					
 				case CreateNewArmy:
-					if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
-						int mouseX = event.mouseButton.x;
-						int mouseY = event.mouseButton.y;
-						printf("x: %d y: %d button: %d\n\n", mouseX, mouseY, resources[CreateNewArmy].checkForClick(sf::Vector2f(mouseX, mouseY), currentState));
-					}
-					if(enteringArmyName){
-						if(event.type == sf::Event::KeyPressed){
-							if(event.key.code == sf::Keyboard::Return) {
-								enteringArmyName = false;
-								workingArmy.armyName = ssArmyName.str();
-							}
-							else if(event.key.code == sf::Keyboard::BackSpace){
-								std::string temp = ssArmyName.str();
-								temp.pop_back();
-								ssArmyName.str(temp);
-								ssArmyName.seekg(0, ssArmyName.end);
-								//ssArmyName.seekp(0, ssArmyName.end);
-								cna::workingArmyName.setString(ssArmyName.str());
-							}
-						}
-						else if(event.type == sf::Event::TextEntered){
-							std::cout << static_cast<char>(event.text.unicode) << "\n";
-							ssArmyName << static_cast<char>(event.text.unicode);
-							cna::workingArmyName.setString(ssArmyName.str());
-						}
-					}
+					checkMouseClick(event, currentState, resources[CreateNewArmy]);
+					cna::takeArmyName(enteringArmyName, event);
 					break;
 					
 				case LoadOldArmy:
