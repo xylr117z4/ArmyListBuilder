@@ -15,7 +15,7 @@ namespace gsh{
 		
 		void newArmyButton(int& currentState){
 			currentState = CreateNewArmy;
-			workingArmy = Army("Name", Ace);
+			workingArmy = Army("New Army", Ace);
 		}
 	};
 	
@@ -33,6 +33,7 @@ namespace gsh{
 		
 		void setArmyName(int& currentState){
 			enteringArmyName = true;
+			workingArmyName.setString("Enter new army name!");
 			ssArmyName = "";
 		}
 		
@@ -81,7 +82,7 @@ namespace gsh{
 		//set buttons for create new army menu
 		cna::workingArmyName.setFont(font);
 		cna::workingArmyName.setPosition(200, 75);
-		cna::workingArmyName.setString("Name");
+		cna::workingArmyName.setString("New Army");
 		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyName, resources[MainMenu].textures[0], "Set Name", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::saveArmy, resources[MainMenu].textures[0], "Save", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
