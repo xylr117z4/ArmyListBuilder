@@ -20,7 +20,7 @@ enum gameState{
 enum armies{
 	Ace,
 	VirtueGang,
-	CountlessSouls,
+	Nameless,
 	Stat,
 	Bugs,
 	Ghouls
@@ -50,6 +50,7 @@ namespace gsh{ //gamestate handler
 	void init(std::vector<Resources>& resources);
 	void render(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources);
 	void handleInput(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources);
+	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources);
 	
 	//button functions
 	namespace mm{ //main menu
@@ -57,9 +58,22 @@ namespace gsh{ //gamestate handler
 		void newArmyButton(int& currentState);
 	};
 	namespace cna{ //create new army
+		//general function
 		void backButton(int& currentState);
-		void saveArmy(int& currentState);
-		void setArmyName(int& currentState);
+		void saveArmyButton(int& currentState);
+		
+		//set army name buttons
+		void setArmyNameButton(int& currentState);
+		void takeArmyName(bool& enteringArmyName,sf::Event& event);
+		void setArmyNameButton(int& currentState);
+		
+		//set army buttons
+		void setArmyAceButton(int& currentState);
+		void setArmyVirtueGangButton(int& currentState);
+		void setArmyNamelessButton(int& currentState);
+		void setArmyStatButton(int& currentState);
+		void setArmyBugsButton(int& currentState);
+		void setArmyGhoulsButton(int& currentState);
 	};
 };
 

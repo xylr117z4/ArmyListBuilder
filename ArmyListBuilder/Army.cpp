@@ -36,4 +36,3 @@ void Army::writeToFile(){
 
 Army::~Army(){
 }
-

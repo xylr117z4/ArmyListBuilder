@@ -27,17 +27,41 @@ namespace gsh{
 			--currentState;
 		}
 		
-		void saveArmy(int& currentState){
+		void saveArmyButton(int& currentState){
 			workingArmy.writeToFile();
 		}
 		
-		void setArmyName(int& currentState){
+		void setArmyNameButton(int& currentState){
 			enteringArmyName = true;
 			workingArmyName.setString("Enter new army name!");
 			ssArmyName = "";
 		}
 		
-		void takeArmyName(bool enteringArmyName,sf::Event& event){
+		void setArmyAceButton(int& currentState){
+			workingArmy.armyID = Ace;
+		}
+		
+		void setArmyVirtueGangButton(int& currentState){
+			workingArmy.armyID = VirtueGang;
+		}
+		
+		void setArmyNamelessButton(int& currentState){
+			workingArmy.armyID = Nameless;
+		}
+		
+		void setArmyStatButton(int& currentState){
+			workingArmy.armyID = Stat;
+		}
+		
+		void setArmyBugsButton(int& currentState){
+			workingArmy.armyID = Bugs;
+		}
+		
+		void setArmyGhoulsButton(int& currentState){
+			workingArmy.armyID = Ghouls;
+		}
+		
+		void takeArmyName(bool& enteringArmyName,sf::Event& event){
 			if(enteringArmyName){
 				if(event.type == sf::Event::KeyPressed){
 					if(event.key.code == sf::Keyboard::Return) {
@@ -83,9 +107,14 @@ namespace gsh{
 		cna::workingArmyName.setFont(font);
 		cna::workingArmyName.setPosition(200, 75);
 		cna::workingArmyName.setString("New Army");
-		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyName, resources[MainMenu].textures[0], "Set Name", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::saveArmy, resources[MainMenu].textures[0], "Save", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyNameButton, resources[MainMenu].textures[0], "Set Name", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::saveArmyButton, resources[MainMenu].textures[0], "Save", font));
 		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
+		resources[CreateNewArmy].buttons.push_back(Button(300, 250, 200, 50, cna::setArmyAceButton, resources[MainMenu].textures[0], "A.C.E.", font));
+		resources[CreateNewArmy].buttons.push_back(Button(300, 300, 200, 50, cna::setArmyVirtueGangButton, resources[MainMenu].textures[0], "Virtue Gang", font));
+		resources[CreateNewArmy].buttons.push_back(Button(300, 350, 200, 50, cna::setArmyNamelessButton, resources[MainMenu].textures[0], "Nameless", font));
+		resources[CreateNewArmy].buttons.push_back(Button(300, 400, 200, 50, cna::setArmyStatButton, resources[MainMenu].textures[0], "S.T.A.T.", font));
+		resources[CreateNewArmy].buttons.push_back(Button(300, 450, 200, 50, cna::setArmyBugsButton, resources[MainMenu].textures[0], "Bugs", font));
 		
 	}
 
