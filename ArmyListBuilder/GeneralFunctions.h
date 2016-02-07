@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
+#include <dirent.h>
 #include "Button.h"
 #include "Army.h"
 
@@ -24,6 +25,19 @@ enum armies{
 	Stat,
 	Bugs,
 	Ghouls
+};
+
+enum palettes{
+	Red,
+	Blue,
+	Yellow,
+	Green,
+	Orange,
+	Purple,
+	Brown,
+	Pink,
+	Black,
+	White
 };
 
 struct Resources{
@@ -51,11 +65,13 @@ namespace gsh{ //gamestate handler
 	void render(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources);
 	void handleInput(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources);
 	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources);
+	void centerText(sf::Text& workingText);
 	
 	//button functions
 	namespace mm{ //main menu
 		void exitButton(int& currentState);
 		void newArmyButton(int& currentState);
+		void loadOldArmyButton(int& currentState);
 	};
 	namespace cna{ //create new army
 		//general function
@@ -74,6 +90,18 @@ namespace gsh{ //gamestate handler
 		void setArmyStatButton(int& currentState);
 		void setArmyBugsButton(int& currentState);
 		void setArmyGhoulsButton(int& currentState);
+		
+		//set palette
+		void setArmyPaletteRedButton(int& currentState);
+		void setArmyPaletteBlueButton(int& currentState);
+		void setArmyPaletteYellowButton(int& currentState);
+		void setArmyPaletteGreenButton(int& currentState);
+		void setArmyPaletteOrangeButton(int& currentState);
+		void setArmyPalettePurpleButton(int& currentState);
+		void setArmyPaletteBrownButton(int& currentState);
+		void setArmyPalettePinkButton(int& currentState);
+		void setArmyPaletteBlackButton(int& currentState);
+		void setArmyPaletteWhiteButton(int& currentState);
 	};
 };
 

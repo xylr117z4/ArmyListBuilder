@@ -6,6 +6,7 @@ Army::Army(){
 Army::Army(std::string name, int id){
 	armyName = name;
 	armyID = id;
+	armyPalette = 0;
 	numberOfSquads = 1;
 }
 
@@ -16,7 +17,7 @@ void Army::writeToFile(){
 	
 	armyOutput["Name"] = armyName;
 	armyOutput["Army"] = armyID;
-	armyOutput["Palette"] = palette;
+	armyOutput["Palette"] = armyPalette;
 	armyOutput["Squads"]["Number"] = numberOfSquads;
 	for(int i = 0; i < numberOfSquads; ++i){
 		ss.str("");
