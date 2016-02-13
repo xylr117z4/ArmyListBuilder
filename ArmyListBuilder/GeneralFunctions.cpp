@@ -4,6 +4,7 @@ namespace gsh{
 	//general use
 	sf::Font font;
 	Army workingArmy;
+	sf::Text workingArmyName;
 	
 	//for creating new army
 	std::string ssArmyName;
@@ -22,20 +23,18 @@ namespace gsh{
 		void newArmyButton(int& currentState, std::string buttonText){
 			currentState = CreateNewArmy;
 			workingArmy = Army("New Army", Ace);
+			workingArmyName.setString("New Army");
+			centerText(workingArmyName);
 		}
 		
 		void loadOldArmyButton(int& currentState, std::string buttonText){
 			currentState = LoadOldArmy;
 			filesInDir = getFilesInDir("json");
-			for(unsigned int i = 0; i < filesInDir.size(); ++i){
-				printf("%s\n\n", filesInDir[i].c_str());
-			}
 		}
 	};
 	
 	//create new army button functions
 	namespace cna{
-		sf::Text workingArmyName;
 		
 		void backButton(int& currentState, std::string buttonText){
 			currentState = MainMenu;
@@ -168,6 +167,12 @@ namespace gsh{
 		
 		void loadArmyFromFile(int& currentState, std::string buttonText){
 			printf("%s\n", buttonText.c_str());
+			Army temp(buttonText, 0);
+			temp.readFromFile(buttonText);
+			workingArmy = temp;
+			printf("armyName: %s\n", workingArmy.armyName.c_str());
+			printf("armyID: %d\n", workingArmy.armyID);
+			printf("armyPallette: %d\n\n", workingArmy.armyPalette);
 		}
 	};
 	
@@ -222,10 +227,10 @@ namespace gsh{
 		resources[MainMenu].buttons.push_back(Button(300, 400, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
 		
 		//set buttons for create new army menu
-		cna::workingArmyName.setFont(font);
-		cna::workingArmyName.setPosition(400, 75);
-		cna::workingArmyName.setString("New Army");
-		centerText(cna::workingArmyName);
+		workingArmyName.setFont(font);
+		workingArmyName.setPosition(400, 75);
+		workingArmyName.setString("New Army");
+		centerText(workingArmyName);
 		//general buttons
 		resources[CreateNewArmy].buttons.push_back(Button(300, 450, 200, 50, cna::setArmyNameButton, resources[MainMenu].textures[0], "Set Name", font));
 		resources[CreateNewArmy].buttons.push_back(Button(300, 500, 200, 50, cna::saveArmyButton, resources[MainMenu].textures[0], "Save", font));
@@ -274,7 +279,7 @@ namespace gsh{
 				
 			case CreateNewArmy:
 				resources[CreateNewArmy].draw(window);
-				window.draw(cna::workingArmyName);
+				window.draw(workingArmyName);
 				break;
 				
 			case LoadOldArmy:

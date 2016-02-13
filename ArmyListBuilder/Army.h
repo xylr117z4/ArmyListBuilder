@@ -13,6 +13,7 @@ public:
 	Army();
 	Army(std::string name, int id);
 	void writeToFile();
+	void readFromFile(std::string str);
 	~Army();
 	int armyID;
 	int armyPalette;

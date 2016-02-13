@@ -35,5 +35,31 @@ void Army::writeToFile(){
 	armyOutputFile.close();
 }
 
+void Army::readFromFile(std::string str){
+	js::json armyInput;
+	std::ifstream armyInputFile;
+	std::stringstream ss;
+	
+	armyInputFile.open("json/" + str);
+	armyInputFile >> armyInput;
+	armyInputFile.close();
+	
+	armyName = armyInput["Name"];
+	armyID = armyInput["Army"];
+	armyPalette = armyInput["Palette"];
+	numberOfSquads = armyInput["Squads"]["Number"];
+	
+	for(int i = 0; i < numberOfSquads; ++i){
+		ss.str("");
+		ss << i;
+		//armyInput["Squads"][ss.str()]["Stats"] = 0; //squads[i].stats
+		
+		//testing what the squad will store just a json thing and put it in gear
+		js::json thing;
+		thing["stuff"] = 9001;
+		thing = armyInput["Squads"][ss.str()]["Gear"]; //squads[i].gear
+	}
+}
+
 Army::~Army(){
 }
