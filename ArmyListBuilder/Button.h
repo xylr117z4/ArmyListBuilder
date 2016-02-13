@@ -14,6 +14,7 @@ class Button{
 		sf::Sprite sprite;
 		sf::Text text;
 		sf::Vector2f size, pos;
+		int textHeight;
 		std::function<void(int&, std::string)> execute;
 		~Button();
 };

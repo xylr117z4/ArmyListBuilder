@@ -100,6 +100,12 @@ namespace gsh{ //gamestate handler
 		//load army from file buttons
 		void loadArmyFromFile(int& currentState, std::string buttonText);
 		void incrementFilesShown(int& currentState, std::string buttonText);
+		void acceptButton(int& currentState, std::string buttonText);
+	};
+	
+	namespace ea{
+		//general functions
+		void menuButton(int& currentState, std::string buttonText);
 	};
 };
 

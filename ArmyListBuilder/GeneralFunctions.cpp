@@ -5,6 +5,7 @@ namespace gsh{
 	sf::Font font;
 	Army workingArmy;
 	sf::Text workingArmyName;
+	int textHeight = 22;
 	
 	//for creating new army
 	std::string ssArmyName;
@@ -105,7 +106,7 @@ namespace gsh{
 			}
 		}
 		
-		void takeArmyName(bool& enteringArmyName,sf::Event& event){
+		void takeArmyName(bool& enteringArmyName, sf::Event& event){
 			if(enteringArmyName){
 				if(event.type == sf::Event::KeyPressed){
 					if(event.key.code == sf::Keyboard::Return) {
@@ -116,6 +117,10 @@ namespace gsh{
 						ssArmyName.pop_back();
 						workingArmyName.setString(ssArmyName);
 					}
+				}
+				else if(event.type == sf::Event::MouseButtonPressed && ssArmyName != ""){
+					enteringArmyName = false;
+					workingArmy.armyName = ssArmyName;
 				}
 				else if(event.type == sf::Event::TextEntered){
 					if(event.text.unicode != 8 && event.text.unicode != 13 && event.text.unicode != 9166){
@@ -129,7 +134,7 @@ namespace gsh{
 	};
 	
 	namespace loa{
-		int numOtherOfButtons = 3;
+		int numOtherOfButtons = 4;
 		
 		void backButton(int& currentState, std::string buttonText){
 			currentState = MainMenu;
@@ -166,13 +171,26 @@ namespace gsh{
 		}
 		
 		void loadArmyFromFile(int& currentState, std::string buttonText){
-			printf("%s\n", buttonText.c_str());
-			Army temp(buttonText, 0);
-			temp.readFromFile(buttonText);
-			workingArmy = temp;
-			printf("armyName: %s\n", workingArmy.armyName.c_str());
-			printf("armyID: %d\n", workingArmy.armyID);
-			printf("armyPallette: %d\n\n", workingArmy.armyPalette);
+			if(buttonText != ""){
+				Army temp(buttonText, 0);
+				temp.readFromFile(buttonText);
+				workingArmy = temp;
+				printf("armyName: %s\n", workingArmy.armyName.c_str());
+				printf("armyID: %d\n", workingArmy.armyID);
+				printf("armyPallette: %d\n\n", workingArmy.armyPalette);
+			}
+		}
+		
+		void acceptButton(int& currentState, std::string buttonText){
+			if(workingArmy.armyName != ""){
+				currentState = EditingArmy;
+			}
+		}
+	};
+	
+	namespace ea{
+		void menuButton(int& currentState, std::string buttonText){
+			currentState = MainMenu; //just temporary as I build the edit army screen
 		}
 	};
 	
@@ -186,7 +204,7 @@ namespace gsh{
 	
 	void centerText(sf::Text& workingText){
 		sf::Rect<float> workingTextSize = workingText.getLocalBounds();
-		workingText.setOrigin(workingTextSize.width/2, workingTextSize.height);
+		workingText.setOrigin(workingTextSize.width/2, textHeight);//workingTextSize.height);
 	}
 	
 	std::vector<std::string> getFilesInDir(std::string dir){
@@ -219,6 +237,8 @@ namespace gsh{
 		temp.loadFromFile("img/button.png");
 		resources[MainMenu].textures.push_back(temp);
 		temp.loadFromFile("img/largeButton.png");
+		resources[MainMenu].textures.push_back(temp);
+		temp.loadFromFile("img/smallButton.png");
 		resources[MainMenu].textures.push_back(temp);
 		
 		//set buttons for main menu
@@ -255,7 +275,8 @@ namespace gsh{
 		resources[CreateNewArmy].buttons.push_back(Button(600, 550, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "White", font));
 		
 		//set buttons for load old army menu
-		resources[LoadOldArmy].buttons.push_back(Button(300, 550, 200, 50, loa::backButton, resources[MainMenu].textures[0], "Back", font));
+		resources[LoadOldArmy].buttons.push_back(Button(0, 550, 200, 50, loa::backButton, resources[MainMenu].textures[0], "Back", font));
+		resources[LoadOldArmy].buttons.push_back(Button(600, 550, 200, 50, loa::acceptButton, resources[MainMenu].textures[0], "Accept", font));
 		resources[LoadOldArmy].buttons.push_back(Button(300, 50, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "^", font));
 		resources[LoadOldArmy].buttons.push_back(Button(300, 500, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "v", font));
 		//buttons based on files
@@ -268,6 +289,8 @@ namespace gsh{
 		resources[LoadOldArmy].buttons.push_back(Button(100, 400, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
 		resources[LoadOldArmy].buttons.push_back(Button(100, 450, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
 		
+		//set buttons for editting army menu
+		resources[EditingArmy].buttons.push_back(Button(750, 0, 50, 50, ea::menuButton, resources[MainMenu].textures[2], "[=]", font));
 	}
 
 	void render(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources){
@@ -287,6 +310,7 @@ namespace gsh{
 				break;
 				
 			case EditingArmy:
+				resources[EditingArmy].draw(window);
 				break;
 				
 			case SelectingOptions:
@@ -326,6 +350,7 @@ namespace gsh{
 					break;
 					
 				case EditingArmy:
+					checkMouseClick(event, currentState, resources[EditingArmy]);
 					break;
 					
 				case SelectingOptions:
