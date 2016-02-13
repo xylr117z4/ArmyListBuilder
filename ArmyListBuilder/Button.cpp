@@ -10,7 +10,7 @@ Button::Button(int x, int y, int sizeX, int sizeY, std::function<void(int&, std:
 	text.setString(str);
 	sf::Rect<float> textSize = text.getLocalBounds();
 	text.setOrigin(textSize.width/2, textSize.height);
-	text.setPosition(x+size.x/2, y+size.y/2);
+	text.setPosition(pos.x+size.x/2, pos.y+size.y/2);
 }
 
 bool Button::isClicked(sf::Vector2f mousePos){
@@ -18,6 +18,13 @@ bool Button::isClicked(sf::Vector2f mousePos){
 		return true;
 	}
 	return false;
+}
+
+void Button::setText(std::string str){
+	text.setString(str);
+	sf::Rect<float> textSize = text.getLocalBounds();
+	text.setOrigin(textSize.width/2, textSize.height);
+	text.setPosition(pos.x+size.x/2, pos.y+size.y/2);
 }
 
 Button::~Button(){

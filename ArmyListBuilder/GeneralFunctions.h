@@ -66,6 +66,7 @@ namespace gsh{ //gamestate handler
 	void handleInput(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources);
 	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources);
 	void centerText(sf::Text& workingText);
+	std::vector<std::string> getFilesInDir(std::string dir);
 	
 	//button functions
 	namespace mm{ //main menu
@@ -73,6 +74,7 @@ namespace gsh{ //gamestate handler
 		void newArmyButton(int& currentState, std::string buttonText);
 		void loadOldArmyButton(int& currentState, std::string buttonText);
 	};
+	
 	namespace cna{ //create new army
 		//general function
 		void backButton(int& currentState, std::string buttonText);
@@ -84,24 +86,20 @@ namespace gsh{ //gamestate handler
 		void setArmyNameButton(int& currentState, std::string buttonText);
 		
 		//set army buttons
-		void setArmyAceButton(int& currentState, std::string buttonText);
-		void setArmyVirtueGangButton(int& currentState, std::string buttonText);
-		void setArmyNamelessButton(int& currentState, std::string buttonText);
-		void setArmyStatButton(int& currentState, std::string buttonText);
-		void setArmyBugsButton(int& currentState, std::string buttonText);
-		void setArmyGhoulsButton(int& currentState, std::string buttonText);
+		void setArmyButton(int& currentState, std::string buttonText);
 		
 		//set palette
-		void setArmyPaletteRedButton(int& currentState, std::string buttonText);
-		void setArmyPaletteBlueButton(int& currentState, std::string buttonText);
-		void setArmyPaletteYellowButton(int& currentState, std::string buttonText);
-		void setArmyPaletteGreenButton(int& currentState, std::string buttonText);
-		void setArmyPaletteOrangeButton(int& currentState, std::string buttonText);
-		void setArmyPalettePurpleButton(int& currentState, std::string buttonText);
-		void setArmyPaletteBrownButton(int& currentState, std::string buttonText);
-		void setArmyPalettePinkButton(int& currentState, std::string buttonText);
-		void setArmyPaletteBlackButton(int& currentState, std::string buttonText);
-		void setArmyPaletteWhiteButton(int& currentState, std::string buttonText);
+		void setArmyPaletteButton(int& currentState, std::string buttonText);
+	};
+	
+	namespace loa{
+		//general functions
+		void updateButtonNames(Resources& resources);
+		void backButton(int& currentState, std::string buttonText);
+		
+		//load army from file buttons
+		void loadArmyFromFile(int& currentState, std::string buttonText);
+		void incrementFilesShown(int& currentState, std::string buttonText);
 	};
 };
 

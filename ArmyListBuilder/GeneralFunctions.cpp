@@ -1,11 +1,17 @@
 #include "GeneralFunctions.h"
 
 namespace gsh{
-	
+	//general use
 	sf::Font font;
 	Army workingArmy;
+	
+	//for creating new army
 	std::string ssArmyName;
 	bool enteringArmyName = false;
+	
+	//for loading old army
+	std::vector<std::string> filesInDir;
+	unsigned int fileIncrementor = 0;
 	
 	//main menu button functions
 	namespace mm{
@@ -20,6 +26,10 @@ namespace gsh{
 		
 		void loadOldArmyButton(int& currentState, std::string buttonText){
 			currentState = LoadOldArmy;
+			filesInDir = getFilesInDir("json");
+			for(unsigned int i = 0; i < filesInDir.size(); ++i){
+				printf("%s\n\n", filesInDir[i].c_str());
+			}
 		}
 	};
 	
@@ -42,68 +52,58 @@ namespace gsh{
 			ssArmyName = "";
 		}
 		
-		void setArmyAceButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = Ace;
+		void setArmyButton(int& currentState, std::string buttonText){
+			if(buttonText == "A.C.E."){
+				workingArmy.armyID = Ace;
+			}
+			else if(buttonText == "VirtueGang"){
+				workingArmy.armyID = VirtueGang;
+			}
+			else if(buttonText == "Nameless"){
+				workingArmy.armyID = Nameless;
+			}
+			else if(buttonText == "S.T.A.T."){
+				workingArmy.armyID = Stat;
+			}
+			else if(buttonText == "Bugs"){
+				workingArmy.armyID = Bugs;
+			}
+			else if(buttonText == "Ghouls"){
+				workingArmy.armyID = Ghouls;
+			}
 		}
 		
-		void setArmyVirtueGangButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = VirtueGang;
-		}
-		
-		void setArmyNamelessButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = Nameless;
-		}
-		
-		void setArmyStatButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = Stat;
-		}
-		
-		void setArmyBugsButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = Bugs;
-		}
-		
-		void setArmyGhoulsButton(int& currentState, std::string buttonText){
-			workingArmy.armyID = Ghouls;
-		}
-		
-		void setArmyPaletteRedButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Red;
-		}
-		
-		void setArmyPaletteBlueButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Blue;
-		}
-		
-		void setArmyPaletteYellowButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Yellow;
-		}
-		
-		void setArmyPaletteGreenButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Green;
-		}
-		
-		void setArmyPaletteOrangeButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Orange;
-		}
-		
-		void setArmyPalettePurpleButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Purple;
-		}
-		
-		void setArmyPaletteBrownButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Brown;
-		}
-		
-		void setArmyPalettePinkButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Pink;
-		}
-		
-		void setArmyPaletteBlackButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = Black;
-		}
-		
-		void setArmyPaletteWhiteButton(int& currentState, std::string buttonText){
-			workingArmy.armyPalette = White;
+		void setArmyPaletteButton(int& currentState, std::string buttonText){
+			if(buttonText == "Red"){
+				workingArmy.armyPalette = Red;
+			}
+			else if(buttonText == "Blue"){
+				workingArmy.armyPalette = Blue;
+			}
+			else if(buttonText == "Yellow"){
+				workingArmy.armyPalette = Yellow;
+			}
+			else if(buttonText == "Green"){
+				workingArmy.armyPalette = Green;
+			}
+			else if(buttonText == "Orange"){
+				workingArmy.armyPalette = Orange;
+			}
+			else if(buttonText == "Purple"){
+				workingArmy.armyPalette = Purple;
+			}
+			else if(buttonText == "Brown"){
+				workingArmy.armyPalette = Brown;
+			}
+			else if(buttonText == "Pink"){
+				workingArmy.armyPalette = Pink;
+			}
+			else if(buttonText == "Black"){
+				workingArmy.armyPalette = Black;
+			}
+			else if(buttonText == "White"){
+				workingArmy.armyPalette = White;
+			}
 		}
 		
 		void takeArmyName(bool& enteringArmyName,sf::Event& event){
@@ -129,11 +129,53 @@ namespace gsh{
 		}
 	};
 	
+	namespace loa{
+		int numOtherOfButtons = 3;
+		
+		void backButton(int& currentState, std::string buttonText){
+			currentState = MainMenu;
+		}
+		
+		void updateButtonNames(Resources& resources){
+			std::string extention = ".json";
+			std::vector<std::string> useableFiles;
+			for(unsigned int i = 0; i < filesInDir.size(); ++i){
+				if(filesInDir[i].find(extention) != std::string::npos){
+					useableFiles.push_back(filesInDir[i]);
+				}
+			}
+			for(unsigned int i = 0; i < resources.buttons.size(); ++i){
+				if(i+fileIncrementor < useableFiles.size()){
+					resources.buttons[i+numOtherOfButtons].setText(useableFiles[i+fileIncrementor]);
+				}
+				else if(i+numOtherOfButtons < resources.buttons.size()){
+					resources.buttons[i+numOtherOfButtons].setText("");
+				}
+				else{
+					break;
+				}
+			}
+		}
+		
+		void incrementFilesShown(int& currentState, std::string buttonText){
+			if(buttonText == "v" && fileIncrementor < filesInDir.size()){ //alt 31
+				++fileIncrementor;
+			}
+			else if(buttonText == "^" && fileIncrementor > 0){ //alt 30
+				--fileIncrementor;
+			}
+		}
+		
+		void loadArmyFromFile(int& currentState, std::string buttonText){
+			printf("%s\n", buttonText.c_str());
+		}
+	};
+	
 	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources){
 		if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
 			int mouseX = event.mouseButton.x;
 			int mouseY = event.mouseButton.y;
-			printf("x: %d y: %d button: %d\n\n", mouseX, mouseY, resources.checkForClick(sf::Vector2f(mouseX, mouseY), currentState));
+			resources.checkForClick(sf::Vector2f(mouseX, mouseY), currentState);
 		}
 	}
 	
@@ -165,13 +207,16 @@ namespace gsh{
 	void init(std::vector<Resources>& resources){
 		//load resources resize vector
 		resources.resize(7);
+		font.loadFromFile("font/LiberationSans-Regular.ttf");
+		
+		//we'll just use the main menu texture vector to hold the button sprites eh...
 		sf::Texture temp;
 		temp.loadFromFile("img/button.png");
-		font.loadFromFile("font/LiberationSans-Regular.ttf");
-		std::vector<std::string> filesInDir = getFilesInDir(".");
+		resources[MainMenu].textures.push_back(temp);
+		temp.loadFromFile("img/largeButton.png");
+		resources[MainMenu].textures.push_back(temp);
 		
 		//set buttons for main menu
-		resources[MainMenu].textures.push_back(temp);
 		resources[MainMenu].buttons.push_back(Button(300, 200, 200, 50, mm::newArmyButton, resources[MainMenu].textures[0], "New", font));
 		resources[MainMenu].buttons.push_back(Button(300, 300, 200, 50, mm::loadOldArmyButton, resources[MainMenu].textures[0], "Edit", font));
 		resources[MainMenu].buttons.push_back(Button(300, 400, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
@@ -186,25 +231,37 @@ namespace gsh{
 		resources[CreateNewArmy].buttons.push_back(Button(300, 500, 200, 50, cna::saveArmyButton, resources[MainMenu].textures[0], "Save", font));
 		resources[CreateNewArmy].buttons.push_back(Button(300, 550, 200, 50, cna::backButton, resources[MainMenu].textures[0], "Back", font));
 		//army selection
-		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyAceButton, resources[MainMenu].textures[0], "A.C.E.", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 350, 200, 50, cna::setArmyVirtueGangButton, resources[MainMenu].textures[0], "VirtueGang", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 400, 200, 50, cna::setArmyNamelessButton, resources[MainMenu].textures[0], "Nameless", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 450, 200, 50, cna::setArmyStatButton, resources[MainMenu].textures[0], "S.T.A.T.", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::setArmyBugsButton, resources[MainMenu].textures[0], "Bugs", font));
-		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::setArmyGhoulsButton, resources[MainMenu].textures[0], "Ghouls", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 300, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "A.C.E.", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 350, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "VirtueGang", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 400, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "Nameless", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 450, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "S.T.A.T.", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 500, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "Bugs", font));
+		resources[CreateNewArmy].buttons.push_back(Button(0, 550, 200, 50, cna::setArmyButton, resources[MainMenu].textures[0], "Ghouls", font));
 		//palette selection
-		resources[CreateNewArmy].buttons.push_back(Button(600, 100, 200, 50, cna::setArmyPaletteRedButton, resources[MainMenu].textures[0], "Red", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 150, 200, 50, cna::setArmyPaletteBlueButton, resources[MainMenu].textures[0], "Blue", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 200, 200, 50, cna::setArmyPaletteYellowButton, resources[MainMenu].textures[0], "Yellow", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 250, 200, 50, cna::setArmyPaletteGreenButton, resources[MainMenu].textures[0], "Green", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 300, 200, 50, cna::setArmyPaletteOrangeButton, resources[MainMenu].textures[0], "Orange", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 350, 200, 50, cna::setArmyPalettePurpleButton, resources[MainMenu].textures[0], "Purple", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 400, 200, 50, cna::setArmyPaletteBrownButton, resources[MainMenu].textures[0], "Brown", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 450, 200, 50, cna::setArmyPalettePinkButton, resources[MainMenu].textures[0], "Pink", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 500, 200, 50, cna::setArmyPaletteBlackButton, resources[MainMenu].textures[0], "Black", font));
-		resources[CreateNewArmy].buttons.push_back(Button(600, 550, 200, 50, cna::setArmyPaletteWhiteButton, resources[MainMenu].textures[0], "White", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 100, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Red", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 150, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Blue", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 200, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Yellow", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 250, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Green", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 300, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Orange", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 350, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Purple", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 400, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Brown", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 450, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Pink", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 500, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "Black", font));
+		resources[CreateNewArmy].buttons.push_back(Button(600, 550, 200, 50, cna::setArmyPaletteButton, resources[MainMenu].textures[0], "White", font));
 		
 		//set buttons for load old army menu
+		resources[LoadOldArmy].buttons.push_back(Button(300, 550, 200, 50, loa::backButton, resources[MainMenu].textures[0], "Back", font));
+		resources[LoadOldArmy].buttons.push_back(Button(300, 50, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "^", font));
+		resources[LoadOldArmy].buttons.push_back(Button(300, 500, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "v", font));
+		//buttons based on files
+		resources[LoadOldArmy].buttons.push_back(Button(100, 100, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 150, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 200, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 250, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 300, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 350, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 400, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 450, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
 		
 	}
 
@@ -221,6 +278,7 @@ namespace gsh{
 				break;
 				
 			case LoadOldArmy:
+				resources[LoadOldArmy].draw(window);
 				break;
 				
 			case EditingArmy:
@@ -258,6 +316,8 @@ namespace gsh{
 					break;
 					
 				case LoadOldArmy:
+					loa::updateButtonNames(resources[LoadOldArmy]);
+					checkMouseClick(event, currentState, resources[LoadOldArmy]);
 					break;
 					
 				case EditingArmy:

@@ -10,6 +10,7 @@
 int main(int argc, char **argv){
 	
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+	window.setFramerateLimit(60);
 	gameState currentState = MainMenu;
 	
 	std::vector<Resources> resources;
