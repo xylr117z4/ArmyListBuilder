@@ -43,6 +43,7 @@ namespace gsh{
 		
 		void saveArmyButton(int& currentState, std::string buttonText){
 			workingArmy.writeToFile();
+			currentState = EditingArmy;
 		}
 		
 		void setArmyNameButton(int& currentState, std::string buttonText){
@@ -192,6 +193,10 @@ namespace gsh{
 		void menuButton(int& currentState, std::string buttonText){
 			currentState = MainMenu; //just temporary as I build the edit army screen
 		}
+		
+		void typeButton(int& currentState, std::string buttonText){
+			//need squad ground work first
+		}
 	};
 	
 	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources){
@@ -291,6 +296,12 @@ namespace gsh{
 		
 		//set buttons for editting army menu
 		resources[EditingArmy].buttons.push_back(Button(750, 0, 50, 50, ea::menuButton, resources[MainMenu].textures[2], "[=]", font));
+		//unit type buttons (generic)
+		resources[EditingArmy].buttons.push_back(Button(0, 350, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Infantry", font));
+		resources[EditingArmy].buttons.push_back(Button(0, 400, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Light", font));
+		resources[EditingArmy].buttons.push_back(Button(0, 450, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Heavy", font));
+		resources[EditingArmy].buttons.push_back(Button(0, 500, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Air", font));
+		//available unit buttons (army specific)
 	}
 
 	void render(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources){

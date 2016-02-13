@@ -106,6 +106,9 @@ namespace gsh{ //gamestate handler
 	namespace ea{
 		//general functions
 		void menuButton(int& currentState, std::string buttonText);
+		
+		//unit type buttons
+		void typeButton(int& currentState, std::string buttonText);
 	};
 };
 
