@@ -9,18 +9,17 @@ namespace gsh{
 	
 	//main menu button functions
 	namespace mm{
-		void exitButton(int& currentState){
+		void exitButton(int& currentState, std::string buttonText){
 			currentState = Exit;
 		}
 		
-		void newArmyButton(int& currentState){
+		void newArmyButton(int& currentState, std::string buttonText){
 			currentState = CreateNewArmy;
 			workingArmy = Army("New Army", Ace);
 		}
 		
-		void loadOldArmyButton(int& currentState){
+		void loadOldArmyButton(int& currentState, std::string buttonText){
 			currentState = LoadOldArmy;
-			
 		}
 	};
 	
@@ -28,82 +27,82 @@ namespace gsh{
 	namespace cna{
 		sf::Text workingArmyName;
 		
-		void backButton(int& currentState){
-			--currentState;
+		void backButton(int& currentState, std::string buttonText){
+			currentState = MainMenu;
 		}
 		
-		void saveArmyButton(int& currentState){
+		void saveArmyButton(int& currentState, std::string buttonText){
 			workingArmy.writeToFile();
 		}
 		
-		void setArmyNameButton(int& currentState){
+		void setArmyNameButton(int& currentState, std::string buttonText){
 			enteringArmyName = true;
 			workingArmyName.setString("Enter new army name!");
 			centerText(workingArmyName);
 			ssArmyName = "";
 		}
 		
-		void setArmyAceButton(int& currentState){
+		void setArmyAceButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = Ace;
 		}
 		
-		void setArmyVirtueGangButton(int& currentState){
+		void setArmyVirtueGangButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = VirtueGang;
 		}
 		
-		void setArmyNamelessButton(int& currentState){
+		void setArmyNamelessButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = Nameless;
 		}
 		
-		void setArmyStatButton(int& currentState){
+		void setArmyStatButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = Stat;
 		}
 		
-		void setArmyBugsButton(int& currentState){
+		void setArmyBugsButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = Bugs;
 		}
 		
-		void setArmyGhoulsButton(int& currentState){
+		void setArmyGhoulsButton(int& currentState, std::string buttonText){
 			workingArmy.armyID = Ghouls;
 		}
 		
-		void setArmyPaletteRedButton(int& currentState){
+		void setArmyPaletteRedButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Red;
 		}
 		
-		void setArmyPaletteBlueButton(int& currentState){
+		void setArmyPaletteBlueButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Blue;
 		}
 		
-		void setArmyPaletteYellowButton(int& currentState){
+		void setArmyPaletteYellowButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Yellow;
 		}
 		
-		void setArmyPaletteGreenButton(int& currentState){
+		void setArmyPaletteGreenButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Green;
 		}
 		
-		void setArmyPaletteOrangeButton(int& currentState){
+		void setArmyPaletteOrangeButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Orange;
 		}
 		
-		void setArmyPalettePurpleButton(int& currentState){
+		void setArmyPalettePurpleButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Purple;
 		}
 		
-		void setArmyPaletteBrownButton(int& currentState){
+		void setArmyPaletteBrownButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Brown;
 		}
 		
-		void setArmyPalettePinkButton(int& currentState){
+		void setArmyPalettePinkButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Pink;
 		}
 		
-		void setArmyPaletteBlackButton(int& currentState){
+		void setArmyPaletteBlackButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = Black;
 		}
 		
-		void setArmyPaletteWhiteButton(int& currentState){
+		void setArmyPaletteWhiteButton(int& currentState, std::string buttonText){
 			workingArmy.armyPalette = White;
 		}
 		

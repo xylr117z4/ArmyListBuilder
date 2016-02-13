@@ -8,12 +8,12 @@
 
 class Button{
 	public:
-		Button(int x, int y, int sizeX, int sizeY, std::function<void(int&)> buttonFunc, sf::Texture& texture, std::string str, sf::Font& font);
+		Button(int x, int y, int sizeX, int sizeY, std::function<void(int&, std::string)> buttonFunc, sf::Texture& texture, std::string str, sf::Font& font);
 		bool isClicked(sf::Vector2f mousePos);
 		sf::Sprite sprite;
 		sf::Text text;
 		sf::Vector2f size, pos;
-		std::function<void(int&)> execute;
+		std::function<void(int&, std::string)> execute;
 		~Button();
 };
 

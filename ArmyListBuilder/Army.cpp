@@ -30,7 +30,7 @@ void Army::writeToFile(){
 		armyOutput["Squads"][ss.str()]["Gear"] = thing; //squads[i].gear
 	}
 	
-	armyOutputFile.open(armyName + ".json");
+	armyOutputFile.open("json/" + armyName + ".json");
 	armyOutputFile << armyOutput;
 	armyOutputFile.close();
 }

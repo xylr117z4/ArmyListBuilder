@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(int x, int y, int sizeX, int sizeY, std::function<void(int&)> buttonFunc, sf::Texture& texture, std::string str, sf::Font& font){
+Button::Button(int x, int y, int sizeX, int sizeY, std::function<void(int&, std::string)> buttonFunc, sf::Texture& texture, std::string str, sf::Font& font){
 	pos = sf::Vector2f(x, y);
 	size = sf::Vector2f(sizeX, sizeY);
 	sprite.setPosition(x, y);

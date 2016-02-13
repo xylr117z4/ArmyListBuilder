@@ -52,7 +52,7 @@ struct Resources{
 	int checkForClick(sf::Vector2f mousePos, gameState& currentState){
 		for(unsigned int i = 0; i < buttons.size(); ++i){
 			if(buttons[i].isClicked(mousePos)){
-				buttons[i].execute((int&)currentState);
+				buttons[i].execute((int&)currentState, buttons[i].text.getString());
 				return i;
 			}
 		}
@@ -69,39 +69,39 @@ namespace gsh{ //gamestate handler
 	
 	//button functions
 	namespace mm{ //main menu
-		void exitButton(int& currentState);
-		void newArmyButton(int& currentState);
-		void loadOldArmyButton(int& currentState);
+		void exitButton(int& currentState, std::string buttonText);
+		void newArmyButton(int& currentState, std::string buttonText);
+		void loadOldArmyButton(int& currentState, std::string buttonText);
 	};
 	namespace cna{ //create new army
 		//general function
-		void backButton(int& currentState);
-		void saveArmyButton(int& currentState);
+		void backButton(int& currentState, std::string buttonText);
+		void saveArmyButton(int& currentState, std::string buttonText);
 		
 		//set army name buttons
-		void setArmyNameButton(int& currentState);
-		void takeArmyName(bool& enteringArmyName,sf::Event& event);
-		void setArmyNameButton(int& currentState);
+		void setArmyNameButton(int& currentState, std::string buttonText);
+		void takeArmyName(bool& enteringArmyName, sf::Event& event);
+		void setArmyNameButton(int& currentState, std::string buttonText);
 		
 		//set army buttons
-		void setArmyAceButton(int& currentState);
-		void setArmyVirtueGangButton(int& currentState);
-		void setArmyNamelessButton(int& currentState);
-		void setArmyStatButton(int& currentState);
-		void setArmyBugsButton(int& currentState);
-		void setArmyGhoulsButton(int& currentState);
+		void setArmyAceButton(int& currentState, std::string buttonText);
+		void setArmyVirtueGangButton(int& currentState, std::string buttonText);
+		void setArmyNamelessButton(int& currentState, std::string buttonText);
+		void setArmyStatButton(int& currentState, std::string buttonText);
+		void setArmyBugsButton(int& currentState, std::string buttonText);
+		void setArmyGhoulsButton(int& currentState, std::string buttonText);
 		
 		//set palette
-		void setArmyPaletteRedButton(int& currentState);
-		void setArmyPaletteBlueButton(int& currentState);
-		void setArmyPaletteYellowButton(int& currentState);
-		void setArmyPaletteGreenButton(int& currentState);
-		void setArmyPaletteOrangeButton(int& currentState);
-		void setArmyPalettePurpleButton(int& currentState);
-		void setArmyPaletteBrownButton(int& currentState);
-		void setArmyPalettePinkButton(int& currentState);
-		void setArmyPaletteBlackButton(int& currentState);
-		void setArmyPaletteWhiteButton(int& currentState);
+		void setArmyPaletteRedButton(int& currentState, std::string buttonText);
+		void setArmyPaletteBlueButton(int& currentState, std::string buttonText);
+		void setArmyPaletteYellowButton(int& currentState, std::string buttonText);
+		void setArmyPaletteGreenButton(int& currentState, std::string buttonText);
+		void setArmyPaletteOrangeButton(int& currentState, std::string buttonText);
+		void setArmyPalettePurpleButton(int& currentState, std::string buttonText);
+		void setArmyPaletteBrownButton(int& currentState, std::string buttonText);
+		void setArmyPalettePinkButton(int& currentState, std::string buttonText);
+		void setArmyPaletteBlackButton(int& currentState, std::string buttonText);
+		void setArmyPaletteWhiteButton(int& currentState, std::string buttonText);
 	};
 };
 
