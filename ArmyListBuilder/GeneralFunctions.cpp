@@ -4,6 +4,7 @@ namespace gsh{
 	//general use
 	sf::Font font;
 	Army workingArmy;
+	int selectedSquad = 0;
 	sf::Text workingArmyName;
 	int textHeight = 22;
 	
@@ -15,66 +16,73 @@ namespace gsh{
 	std::vector<std::string> filesInDir;
 	unsigned int fileIncrementor = 0;
 	
+	//for modifying squads
+	unsigned int squadIncrementor = 0;
+	
 	//main menu button functions
 	namespace mm{
-		void exitButton(int& currentState, std::string buttonText){
-			currentState = Exit;
+		void saveArmyButton(int& currentState, std::string buttonText, std::string extraInfo){
+			workingArmy.writeToFile();
 		}
 		
-		void newArmyButton(int& currentState, std::string buttonText){
+		void newArmyButton(int& currentState, std::string buttonText, std::string extraInfo){
 			currentState = CreateNewArmy;
 			workingArmy = Army("New Army", Ace);
 			workingArmyName.setString("New Army");
 			centerText(workingArmyName);
 		}
 		
-		void loadOldArmyButton(int& currentState, std::string buttonText){
+		void loadOldArmyButton(int& currentState, std::string buttonText, std::string extraInfo){
 			currentState = LoadOldArmy;
 			filesInDir = getFilesInDir("json");
+		}
+		
+		void exitButton(int& currentState, std::string buttonText, std::string extraInfo){
+			currentState = Exit;
 		}
 	};
 	
 	//create new army button functions
 	namespace cna{
 		
-		void backButton(int& currentState, std::string buttonText){
+		void backButton(int& currentState, std::string buttonText, std::string extraInfo){
 			currentState = MainMenu;
 		}
 		
-		void saveArmyButton(int& currentState, std::string buttonText){
+		void saveArmyButton(int& currentState, std::string buttonText, std::string extraInfo){
 			workingArmy.writeToFile();
 			currentState = EditingArmy;
 		}
 		
-		void setArmyNameButton(int& currentState, std::string buttonText){
+		void setArmyNameButton(int& currentState, std::string buttonText, std::string extraInfo){
 			enteringArmyName = true;
 			workingArmyName.setString("Enter new army name!");
 			centerText(workingArmyName);
 			ssArmyName = "";
 		}
 		
-		void setArmyButton(int& currentState, std::string buttonText){
+		void setArmyButton(int& currentState, std::string buttonText, std::string extraInfo){
 			if(buttonText == "A.C.E."){
-				workingArmy.armyID = Ace;
+				workingArmy.armyRace = Ace;
 			}
 			else if(buttonText == "VirtueGang"){
-				workingArmy.armyID = VirtueGang;
+				workingArmy.armyRace = VirtueGang;
 			}
 			else if(buttonText == "Nameless"){
-				workingArmy.armyID = Nameless;
+				workingArmy.armyRace = Nameless;
 			}
 			else if(buttonText == "S.T.A.T."){
-				workingArmy.armyID = Stat;
+				workingArmy.armyRace = Stat;
 			}
 			else if(buttonText == "Bugs"){
-				workingArmy.armyID = Bugs;
+				workingArmy.armyRace = Bugs;
 			}
 			else if(buttonText == "Ghouls"){
-				workingArmy.armyID = Ghouls;
+				workingArmy.armyRace = Ghouls;
 			}
 		}
 		
-		void setArmyPaletteButton(int& currentState, std::string buttonText){
+		void setArmyPaletteButton(int& currentState, std::string buttonText, std::string extraInfo){
 			if(buttonText == "Red"){
 				workingArmy.armyPalette = Red;
 			}
@@ -135,9 +143,9 @@ namespace gsh{
 	};
 	
 	namespace loa{
-		int numOtherOfButtons = 4;
+		int numOfOtherButtons = 4;
 		
-		void backButton(int& currentState, std::string buttonText){
+		void backButton(int& currentState, std::string buttonText, std::string extraInfo){
 			currentState = MainMenu;
 		}
 		
@@ -149,12 +157,12 @@ namespace gsh{
 					useableFiles.push_back(filesInDir[i]);
 				}
 			}
-			for(unsigned int i = 0; i < resources.buttons.size(); ++i){
+			for(unsigned int i = 0; i < resources.buttons.size()-numOfOtherButtons; ++i){
 				if(i+fileIncrementor < useableFiles.size()){
-					resources.buttons[i+numOtherOfButtons].setText(useableFiles[i+fileIncrementor]);
+					resources.buttons[i+numOfOtherButtons].setText(useableFiles[i+fileIncrementor]);
 				}
-				else if(i+numOtherOfButtons < resources.buttons.size()){
-					resources.buttons[i+numOtherOfButtons].setText("");
+				else if(i+numOfOtherButtons < resources.buttons.size()){
+					resources.buttons[i+numOfOtherButtons].setText("");
 				}
 				else{
 					break;
@@ -162,7 +170,7 @@ namespace gsh{
 			}
 		}
 		
-		void incrementFilesShown(int& currentState, std::string buttonText){
+		void incrementFilesShownButton(int& currentState, std::string buttonText, std::string extraInfo){
 			if(buttonText == "v" && fileIncrementor < filesInDir.size()){ //alt 31
 				++fileIncrementor;
 			}
@@ -171,18 +179,18 @@ namespace gsh{
 			}
 		}
 		
-		void loadArmyFromFile(int& currentState, std::string buttonText){
+		void loadArmyFromFileButton(int& currentState, std::string buttonText, std::string extraInfo){
 			if(buttonText != ""){
 				Army temp(buttonText, 0);
 				temp.readFromFile(buttonText);
 				workingArmy = temp;
 				printf("armyName: %s\n", workingArmy.armyName.c_str());
-				printf("armyID: %d\n", workingArmy.armyID);
+				printf("armyID: %d\n", workingArmy.armyRace);
 				printf("armyPallette: %d\n\n", workingArmy.armyPalette);
 			}
 		}
 		
-		void acceptButton(int& currentState, std::string buttonText){
+		void acceptButton(int& currentState, std::string buttonText, std::string extraInfo){
 			if(workingArmy.armyName != ""){
 				currentState = EditingArmy;
 			}
@@ -190,13 +198,122 @@ namespace gsh{
 	};
 	
 	namespace ea{
-		void menuButton(int& currentState, std::string buttonText){
+		int numOfOtherButtons = 15;
+		
+		void menuButton(int& currentState, std::string buttonText, std::string extraInfo){
 			currentState = MainMenu; //just temporary as I build the edit army screen
 		}
 		
-		void typeButton(int& currentState, std::string buttonText){
-			//need squad ground work first
+		void typeButton(int& currentState, std::string buttonText, std::string extraInfo){
+			if(workingArmy.numberOfSquads > 0){
+				if(buttonText == "Infantry"){
+					workingArmy.squads[selectedSquad].squadType = Infantry;
+				}
+				else if(buttonText == "Light Vehicle"){
+					workingArmy.squads[selectedSquad].squadType = LightVehicle;
+				}
+				else if(buttonText == "Heavy Vehicle"){
+					workingArmy.squads[selectedSquad].squadType = HeavyVehicle;
+				}
+				else if(buttonText == "Aircraft"){
+					workingArmy.squads[selectedSquad].squadType = Aircraft;
+				}
+			}
 		}
+		
+		void updateRoleBasedOnRace(Resources& resources){
+			int roleButtonStart = 5;
+			int roleButtonEnd = 12;
+			if(workingArmy.squads.size() > 0){
+				if(workingArmy.armyRace == Ace){
+					if(workingArmy.squads[selectedSquad].squadType == Infantry){
+						std::vector<std::string> listOfRoleNames;
+						int c = 0;
+						listOfRoleNames.push_back("Fire Team");
+						listOfRoleNames.push_back("Sniper Team");
+						listOfRoleNames.push_back("Gunner Team");
+						listOfRoleNames.push_back("Flamer Team");
+						listOfRoleNames.push_back("Anti-tank Team");
+						listOfRoleNames.push_back("Medical Team");
+						listOfRoleNames.push_back("Engineer Team");
+						for(int i = roleButtonStart; i < roleButtonEnd; ++i){
+							resources.buttons[i].setText(listOfRoleNames[c]);
+							++c;
+						}
+					}
+					else{
+						for(int i = roleButtonStart; i < roleButtonEnd; ++i){
+							resources.buttons[i].setText("");
+						}
+					}
+				}
+			}
+		}
+		
+		void roleButton(int& currentState, std::string buttonText, std::string extraInfo){
+			if(workingArmy.numberOfSquads > 0){
+				if(buttonText == "Fire Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::FireTeam;
+				}
+				else if(buttonText == "Sniper Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::SniperTeam;
+				}
+				else if(buttonText == "Gunner Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::GunnerTeam;
+				}
+				else if(buttonText == "Flamer Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::FlamerTeam;
+				}
+				else if(buttonText == "Anti-tank Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::AntiTankTeam;
+				}
+				else if(buttonText == "Medical Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::MedicalTeam;
+				}
+				else if(buttonText == "Engineer Team"){
+					workingArmy.squads[selectedSquad].squadRole = ace::infantry::EngineerTeam;
+				}
+			}
+		}
+		
+		void addNewSquadButton(int& currentState, std::string buttonText, std::string extraInfo){
+			workingArmy.addNewSquad(workingArmy.numberOfSquads, workingArmy.armyRace);
+		}
+		
+		void updateButtonNumbers(Resources& resources){
+			for(unsigned int i = 0; i < resources.buttons.size()-numOfOtherButtons; ++i){
+				std::stringstream ss;
+				if(i+squadIncrementor < (unsigned int)workingArmy.numberOfSquads){
+					ss << workingArmy.squads[i+squadIncrementor].numberOfMembers;
+					resources.buttons[i+numOfOtherButtons].setText(ss.str());
+					ss.str("");
+					ss << workingArmy.squads[i+squadIncrementor].squadId;
+					resources.buttons[i+numOfOtherButtons].extraInfo = ss.str();
+				}
+				else if(i+numOfOtherButtons < resources.buttons.size()){
+					resources.buttons[i+numOfOtherButtons].setText("");
+				}
+				else{
+					break;
+				}
+			}
+		}
+		
+		void incrementSquadsShownButton(int& currentState, std::string buttonText, std::string extraInfo){
+			if(buttonText == ">" && squadIncrementor < (unsigned int)workingArmy.numberOfSquads){ 
+				++squadIncrementor;
+			}
+			else if(buttonText == "<" && squadIncrementor > 0){
+				--squadIncrementor;
+			}
+		}
+		
+		void selectSquadButton(int& currentState, std::string buttonText, std::string extraInfo){
+			if(extraInfo != ""){
+				selectedSquad = stoi(extraInfo);
+			}
+		}
+		
 	};
 	
 	void checkMouseClick(sf::Event& event, gameState& currentState, Resources& resources){
@@ -249,7 +366,8 @@ namespace gsh{
 		//set buttons for main menu
 		resources[MainMenu].buttons.push_back(Button(300, 200, 200, 50, mm::newArmyButton, resources[MainMenu].textures[0], "New", font));
 		resources[MainMenu].buttons.push_back(Button(300, 300, 200, 50, mm::loadOldArmyButton, resources[MainMenu].textures[0], "Edit", font));
-		resources[MainMenu].buttons.push_back(Button(300, 400, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
+		resources[MainMenu].buttons.push_back(Button(300, 350, 200, 50, mm::saveArmyButton, resources[MainMenu].textures[0], "Save", font));
+		resources[MainMenu].buttons.push_back(Button(300, 450, 200, 50, mm::exitButton, resources[MainMenu].textures[0], "Exit", font));
 		
 		//set buttons for create new army menu
 		workingArmyName.setFont(font);
@@ -282,26 +400,52 @@ namespace gsh{
 		//set buttons for load old army menu
 		resources[LoadOldArmy].buttons.push_back(Button(0, 550, 200, 50, loa::backButton, resources[MainMenu].textures[0], "Back", font));
 		resources[LoadOldArmy].buttons.push_back(Button(600, 550, 200, 50, loa::acceptButton, resources[MainMenu].textures[0], "Accept", font));
-		resources[LoadOldArmy].buttons.push_back(Button(300, 50, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "^", font));
-		resources[LoadOldArmy].buttons.push_back(Button(300, 500, 200, 50, loa::incrementFilesShown, resources[MainMenu].textures[0], "v", font));
+		resources[LoadOldArmy].buttons.push_back(Button(300, 50, 200, 50, loa::incrementFilesShownButton, resources[MainMenu].textures[0], "^", font));
+		resources[LoadOldArmy].buttons.push_back(Button(300, 500, 200, 50, loa::incrementFilesShownButton, resources[MainMenu].textures[0], "v", font));
 		//buttons based on files
-		resources[LoadOldArmy].buttons.push_back(Button(100, 100, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 150, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 200, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 250, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 300, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 350, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 400, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
-		resources[LoadOldArmy].buttons.push_back(Button(100, 450, 600, 50, loa::loadArmyFromFile, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 100, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 150, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 200, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 250, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 300, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 350, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 400, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
+		resources[LoadOldArmy].buttons.push_back(Button(100, 450, 600, 50, loa::loadArmyFromFileButton, resources[MainMenu].textures[1], "", font));
 		
 		//set buttons for editting army menu
 		resources[EditingArmy].buttons.push_back(Button(750, 0, 50, 50, ea::menuButton, resources[MainMenu].textures[2], "[=]", font));
 		//unit type buttons (generic)
 		resources[EditingArmy].buttons.push_back(Button(0, 350, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Infantry", font));
-		resources[EditingArmy].buttons.push_back(Button(0, 400, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Light", font));
-		resources[EditingArmy].buttons.push_back(Button(0, 450, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Heavy", font));
-		resources[EditingArmy].buttons.push_back(Button(0, 500, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Air", font));
-		//available unit buttons (army specific)
+		resources[EditingArmy].buttons.push_back(Button(0, 400, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Light Vehicle", font));
+		resources[EditingArmy].buttons.push_back(Button(0, 450, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Heavy Vehicle", font));
+		resources[EditingArmy].buttons.push_back(Button(0, 500, 200, 50, ea::typeButton, resources[MainMenu].textures[0], "Aircraft", font));
+		//role buttons 5 to 12
+		resources[EditingArmy].buttons.push_back(Button(600, 200, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 250, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 300, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 350, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 400, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 450, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 500, 200, 50, ea::roleButton, resources[MainMenu].textures[0], "", font));
+		//squad buttons
+		resources[EditingArmy].buttons.push_back(Button(0, 550, 50, 50, ea::addNewSquadButton, resources[MainMenu].textures[2], "+", font));
+		resources[EditingArmy].buttons.push_back(Button(50, 550, 50, 50, ea::incrementSquadsShownButton, resources[MainMenu].textures[2], "<", font));
+		resources[EditingArmy].buttons.push_back(Button(750, 550, 50, 50, ea::incrementSquadsShownButton, resources[MainMenu].textures[2], ">", font));
+		resources[EditingArmy].buttons.push_back(Button(100, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(150, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(200, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(250, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(300, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(350, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(400, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(450, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(500, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(550, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(600, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(650, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		resources[EditingArmy].buttons.push_back(Button(700, 550, 50, 50, ea::selectSquadButton, resources[MainMenu].textures[2], "", font));
+		
+		
 	}
 
 	void render(sf::RenderWindow& window, gameState& currentState, std::vector<Resources>& resources){
@@ -361,6 +505,8 @@ namespace gsh{
 					break;
 					
 				case EditingArmy:
+					ea::updateButtonNumbers(resources[EditingArmy]);
+					ea::updateRoleBasedOnRace(resources[EditingArmy]);
 					checkMouseClick(event, currentState, resources[EditingArmy]);
 					break;
 					
